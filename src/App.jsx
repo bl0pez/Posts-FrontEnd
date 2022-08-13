@@ -1,10 +1,12 @@
-import { PostsProvider } from './contexts/PostsContext';
+import { PostsProvider } from "./contexts/PostsContext";
+import { BrowserRouter } from "react-router-dom";
 
 export const App = () => {
   return (
-    <PostsProvider>
-      <div>App</div>
-    </PostsProvider>
-  )
-}
-
+    <BrowserRouter>
+      <PostsProvider>
+        <div>App</div>
+      </PostsProvider>
+    </BrowserRouter>
+  );
+};
