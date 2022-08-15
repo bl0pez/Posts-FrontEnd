@@ -1,4 +1,5 @@
-import { PostsList } from "../components/posts/PostsList";
+import { Modal } from "../../components";
+import { NewPost, PostsList } from "../components";
 
 export const Posts = () => {
 
@@ -16,11 +17,10 @@ export const Posts = () => {
         </form>
       </section>
       <section className="text-center mb-4">
-        <button className="text-violet-900 py-1 px-4 text-xl bg-amber-500 shadow-xl rounded-sm transition-colors hover:bg-amber-600">
-          New Post
-        </button>
+        <NewPost />
       </section>
       <PostsList />
+      <Modal />
     </div>
   );
 };
