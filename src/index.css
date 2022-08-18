@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components{
+    .input {
+        @apply py-1 px-2 border text-lg outline-none border-gray-400 rounded-sm focus:border-violet-900 focus:text-violet-900
+    }
+}

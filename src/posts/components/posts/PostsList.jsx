@@ -1,10 +1,13 @@
-import React, { useContext } from "react";
+import React, { useContext, useReducer } from "react";
 import { Loader } from "../../../components";
 import PostsContext from "../../../contexts/PostsContext";
+import { Paginator } from "../paginator/Paginator";
 import { Post } from "./Post";
 
 export const PostsList = () => {
-  const { posts, loading, error } = useContext(PostsContext);
+  const { posts: data } = useContext(PostsContext);
+
+  const { posts, loading, error } = data;
 
   if (loading) {
     return (
@@ -20,9 +23,9 @@ export const PostsList = () => {
 
   return (
     <>
-      {posts.map((post) => (
-        <Post key={post._id} {...post} />
-      ))}
+        {posts.map((post) => (
+          <Post key={post._id} {...post} />
+        ))}
     </>
   );
 };

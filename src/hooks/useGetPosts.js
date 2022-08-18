@@ -1,24 +1,24 @@
-import { useEffect, useState } from 'react';
-import { getPosts } from '../helpers/request/getPosts';
+import { useEffect, useReducer, useState } from 'react';
+import { getPosts } from '../helpers';
+import { initialsState, postsReducer } from '../reducer/posts/postsReducer';
 
 export const useGetPosts = () => {
-    const [posts, setPosts] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    
+    const [ state, dispatch ] = useReducer(postsReducer, initialsState);
 
     useEffect(() => {
+        console.log('renderizado use efect');
+        dispatch({type: "POST_LOADING"});
         getPosts()
-        .then(data => {
-            setPosts(data.posts);
-            setLoading(false);
-        }).catch(err => {
-            setError(err);
-            setLoading(false);
-        });
+            .then(posts => {
+                dispatch({type: "POSTS_SUCCESS", payload: posts.posts});
+            })
+            .catch(error => {
+                dispatch({type: "POSTS_ERROR", payload: error.message});
+            });
     }, []);
     
-
-    return { posts, loading, error };
+    return {state, dispatch};
 
 
 }
