@@ -6,6 +6,8 @@ export const useGetPosts = () => {
     
     const [ state, dispatch ] = useReducer(postsReducer, initialsState);
 
+    console.log(state.page);
+
     useEffect(() => {
         console.log('renderizado use efect');
         dispatch({type: "POST_LOADING"});

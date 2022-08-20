@@ -7,9 +7,7 @@ import { Post } from "./Post";
 export const PostsList = () => {
   const { posts: data } = useContext(PostsContext);
 
-  console.log(data.indexOfFirstPost, data.indexOfLastPost);
-
-  const { posts, loading, error } = data;
+  const { posts, loading, error, totalPage, totalItems} = data;
 
   if (loading) {
     return (
@@ -29,7 +27,9 @@ export const PostsList = () => {
           <Post key={post._id} {...post} />
         )) }
 
-        <Paginator />
+        {
+          totalItems > totalPage && <Paginator />
+        }
 
     </>
   );

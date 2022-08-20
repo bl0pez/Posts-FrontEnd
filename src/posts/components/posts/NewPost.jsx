@@ -30,6 +30,7 @@ export const NewPost = () => {
     setFormSubmitted(true);
 
     createPost({ title, image, content });
+    setIsOpen(false);
 
     if (!formSubmitted) return;
   };

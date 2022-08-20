@@ -10,19 +10,25 @@ export const PostsProvider = ({ children }) => {
     const {state, dispatch} = useGetPosts();
 
     const createPost = async(data) => {
-        dispatch({type: 'START_LOADING'});
+        dispatch({type: "POST_LOADING"});
         const { post } = await postCreate(data);
         dispatch({type: 'POSTS_ADD', payload: post});
     }
 
     const nextPosts = async() => {
-        dispatch({type: 'START_LOADING'});
+        dispatch({type: "POST_LOADING"});
+        if(state.posts.length > state.indexOfLastPost) {
+            dispatch({type: 'NEXT_PAGE'});
+            return;
+        }
+
+
         const { posts } = await getPosts(state.page + 1);
         dispatch({type: 'NEXT_PAGE', payload: posts});
     }
 
     const prevPosts = () => {
-        dispatch({type: 'START_LOADING'});
+        dispatch({type: "POST_LOADING"});
         dispatch({type: 'PREVIOUS_PAGE'});
     }
 
