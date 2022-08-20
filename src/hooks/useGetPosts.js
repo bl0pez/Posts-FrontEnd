@@ -9,9 +9,9 @@ export const useGetPosts = () => {
     useEffect(() => {
         console.log('renderizado use efect');
         dispatch({type: "POST_LOADING"});
-        getPosts()
+        getPosts(state.page)
             .then(posts => {
-                dispatch({type: "POSTS_SUCCESS", payload: posts.posts});
+                dispatch({type: "POSTS_SUCCESS", payload: posts});
             })
             .catch(error => {
                 dispatch({type: "POSTS_ERROR", payload: error.message});

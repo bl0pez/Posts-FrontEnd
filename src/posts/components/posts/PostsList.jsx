@@ -7,6 +7,8 @@ import { Post } from "./Post";
 export const PostsList = () => {
   const { posts: data } = useContext(PostsContext);
 
+  console.log(data.indexOfFirstPost, data.indexOfLastPost);
+
   const { posts, loading, error } = data;
 
   if (loading) {
@@ -23,9 +25,12 @@ export const PostsList = () => {
 
   return (
     <>
-        {posts.map((post) => (
+        {posts.slice(data.indexOfFirstPost, data.indexOfLastPost).map((post) => (
           <Post key={post._id} {...post} />
-        ))}
+        )) }
+
+        <Paginator />
+
     </>
   );
 };

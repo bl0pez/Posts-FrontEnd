@@ -1,53 +1,44 @@
-import { useContext, useEffect, useReducer, useState } from "react";
+import { useContext } from "react";
 import PostsContext from "../../../contexts/PostsContext";
-import { initialState, paginationReducer } from "../../../reducer/posts/paginationReducer";
 
-export const Paginator = ({ children }) => {
+export const Paginator = () => {
+  const { posts: data, dispatch, nextPosts, prevPosts  } = useContext(PostsContext);
 
-    
-    const [state, dispatch] = useReducer(paginationReducer, initialState);
-    const { posts:data } = useContext(PostsContext);
-    
-    const {posts, loading, error} = data;
-    
-    const [postPorPage, setpostPorPage] = useState(posts)
+  const { posts, loading, error, totalPage, page } = data;
 
-    useEffect(() => {
-        dispatch({ type: 'TOTAL_POSTS', payload: posts.length });
-    }, [posts]);
+  if (loading) return <h1>Loading...</h1>;
 
-    console.log(postPorPage);
-    console.log(state);
-
-    if(loading) return <h1>Loading...</h1>
+  if (totalPage === page) {
+    return (
+      <div className="text-center space-x-3">
+        <button
+          type="button"
+          className="border border-gray-300 text-gray-500 hover:text-gray-700 hover:border-violet-900 px-4 py-2 rounded-l-md"
+        >
+          Prev
+        </button>
+      </div>
+    );
+  }
 
   return (
     <>
-    {children}
-
-    <div className="text-center">
+      <div className="text-center space-x-3">
         <button
-            type="button"
-            className="border border-gray-300 text-gray-500 hover:text-gray-700 hover:border-gray-400 px-4 py-2 rounded-l-md"
-        >Prev</button>
+          type="button"
+          className="border border-gray-300 text-gray-500 hover:text-gray-700 hover:border-violet-900 px-4 py-2 rounded-l-md"
+          onClick={() => prevPosts()}
+        >
+          Prev
+        </button>
         <button
-            type="button"
-            className="border border-gray-300 text-gray-500 hover:text-gray-700 hover:border-gray-400 px-4 py-2"
-        >1</button>
-        <button
-            type="button"
-            className="border border-gray-300 text-gray-500 hover:text-gray-700 hover:border-gray-400 px-4 py-2"
-        >2</button>
-        <button
-            type="button"
-            className="border border-gray-300 text-gray-500 hover:text-gray-700 hover:border-gray-400 px-4 py-2"
-        >3</button>
-        <button
-            type="button"
-            className="border border-gray-300 text-gray-500 hover:text-gray-700 hover:border-gray-400 px-4 py-2 rounded-r-md"
-        >Next</button>
-    </div>
-
+          type="button"
+          className="border border-gray-300 text-gray-500 hover:text-gray-700 hover:border-violet-900 px-4 py-2 rounded-r-md"
+          onClick={() => nextPosts()}
+        >
+          Next
+        </button>
+      </div>
     </>
-  )
-}
+  );
+};
