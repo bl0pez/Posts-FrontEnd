@@ -4,24 +4,16 @@ import PostsContext from "../../../contexts/PostsContext";
 export const Paginator = () => {
   const {
     posts: data,
-    dispatch,
     nextPosts,
     prevPosts,
   } = useContext(PostsContext);
 
   const {
-    posts,
-    loading,
-    error,
-    totalPage,
-    page,
     postsPerPage,
     indexOfLastPost,
     indexOfFirstPost,
     totalItems,
   } = data;
-
-  console.log(posts.length > indexOfFirstPost);
 
   if (postsPerPage > indexOfFirstPost) {
     return (

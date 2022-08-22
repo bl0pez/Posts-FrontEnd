@@ -2,7 +2,6 @@ import { createContext } from "react";
 import { getPosts, postCreate } from "../helpers";
 import { useGetPosts } from "../hooks/useGetPosts";
 
-
 const PostsContext = createContext();
 
 export const PostsProvider = ({ children }) => {

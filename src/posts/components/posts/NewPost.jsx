@@ -1,38 +1,48 @@
-import { useContext, useState } from "react";
-import { Input, Modal } from "../../../components";
+import { useContext, useReducer, useState } from "react";
+import { Modal } from "../../../components";
 import PostsContext from "../../../contexts/PostsContext";
-import { useForm } from "../../../hooks/useForm";
-
-const formData = {
-  title: "",
-  content: "",
-};
-
-const formValidation = {
-  title: [(value) => value.length >= 5, "title must be at least 5 characters"],
-  content: [
-    (value) => value.length >= 5,
-    "Content must be at least 5 characters",
-  ],
-};
+import { formReducer, INITIAL_STATE } from "../../../reducer/formReducer";
 
 export const NewPost = () => {
-  const [title, setTitle] = useState("");
-  const [image, setImage] = useState("");
-  const [content, setContent] = useState("");
 
+
+  
   const { createPost } = useContext(PostsContext);
+  const [state, dispatch] = useReducer(formReducer, INITIAL_STATE);
 
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+
+  const handleInputChange = (e) => {
+
+    const { name, value, files } = e.target;
+    dispatch({
+      type:"CHANGE_INPUT",
+      payload: {
+        name,
+        value,
+        files,
+      }
+    })
+
+    if(state.title.length > 5 && state.image !== null && state.content.length > 5){
+      console.log("entro");
+      setFormSubmitted(true);
+    }
+
+  }
+
+  console.log(state);
+
   const handleSumit = (e) => {
     e.preventDefault();
-    setFormSubmitted(true);
 
-    createPost({ title, image, content });
+    console.log('click');
+    if (!formSubmitted) return;
+
+    createPost(state);
     setIsOpen(false);
 
-    if (!formSubmitted) return;
   };
 
   const handleModal = () => {
@@ -59,8 +69,8 @@ export const NewPost = () => {
               className="input"
               type="text"
               name="title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              value={state.title}
+              onChange={handleInputChange}
             />
           </div>
           <div className="text-left flex flex-col gap-2 mb-4">
@@ -71,7 +81,7 @@ export const NewPost = () => {
               className="input"
               type="file"
               name="image"
-              onChange={(e) => setImage(e.target.files[0])}
+              onChange={handleInputChange}
             />
           </div>
           <div className="text-left flex flex-col gap-2 mb-4">
@@ -82,8 +92,8 @@ export const NewPost = () => {
               className="input"
               id="content"
               name="content"
-              value={content}
-              onChange={(e) => setContent(e.target.content)}
+              value={state.content}
+              onChange={handleInputChange}
             ></textarea>
           </div>
           <footer className="p-4 text-right space-x-2">
@@ -96,9 +106,10 @@ export const NewPost = () => {
             </button>
             <button
               type="submit"
-              className="px-4 py-1 rounded text-white bg-violet-900 transition-color hover:bg-violet-900-300"
+              className={`${formSubmitted ? "px-4 py-1 rounded text-white bg-violet-900 transition-color hover:bg-violet-900-300" : " bg-slate-300 px-4 py-1 rounded text-white cursor-not-allowed"}`}
+              disabled={!formSubmitted}
             >
-              Confirmar
+              Crear
             </button>
           </footer>
         </form>
