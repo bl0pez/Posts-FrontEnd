@@ -1,6 +1,7 @@
 import { useContext, useReducer, useState } from "react";
 import { Modal } from "../../../components";
 import PostsContext from "../../../contexts/PostsContext";
+import { renderImg } from "../../../helpers/renderImg";
 import { formReducer, INITIAL_STATE } from "../../../reducer/formReducer";
 
 export const NewPost = () => {
@@ -8,41 +9,39 @@ export const NewPost = () => {
 
   
   const { createPost } = useContext(PostsContext);
-  const [state, dispatch] = useReducer(formReducer, INITIAL_STATE);
+  const [image, setImage] = useState('');
 
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
   const handleInputChange = (e) => {
-
     const { name, value, files } = e.target;
     dispatch({
       type:"CHANGE_INPUT",
       payload: {
         name,
         value,
-        files,
       }
     })
+
+    const img = renderImg(files);
+
+    console.log(img);
 
     if(state.title.length > 5 && state.image !== null && state.content.length > 5){
       console.log("entro");
       setFormSubmitted(true);
     }
-
   }
-
-  console.log(state);
 
   const handleSumit = (e) => {
     e.preventDefault();
 
-    console.log('click');
     if (!formSubmitted) return;
 
     createPost(state);
+    dispatch({type: "RESET_FORM"});
     setIsOpen(false);
-
   };
 
   const handleModal = () => {
@@ -84,6 +83,13 @@ export const NewPost = () => {
               onChange={handleInputChange}
             />
           </div>
+          {
+            image && (
+              <div className="text-left flex flex-col gap-2 mb-4 h-28 w-28">
+                <img className="w-full object-cover" src={renderImg(files)} alt="" />
+              </div>
+              )
+          }
           <div className="text-left flex flex-col gap-2 mb-4">
             <label htmlFor="content" className="text-lg uppercase">
               Content:

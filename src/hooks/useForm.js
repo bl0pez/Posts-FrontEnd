@@ -1,61 +1,32 @@
-import { useEffect, useMemo, useState } from "react";
-
+import { useReducer } from "react";
+import { formReducer, INITIAL_STATE } from "../reducer/formReducer";
 
 export const useForm = (initialForm = {}, formValidations = {}) => {
-    const [ formState, setFormState ] = useState( initialForm );
-    const [formValidation, setFormValidation] = useState({});
 
-    useEffect(() => {
-        createValidator();
-      }, [ formState ]);
-  
-      useEffect(() => {
-        setFormState( initialForm );
-      }, [ initialForm ]);
-      
-      
-      const isFormValid = useMemo( () => {
-          for( const formValue of Object.keys( formValidation)){
-              if( formValidation[formValue] !== null) return false;
-          }
-  
-          return true;
-  
-      }, [ formValidation ]);
-  
-      const onInputChange = ({ target }) => {
-          const { name, value } = target;
-          setFormState({
-              ...formState,
-              [ name ]: value
-          });
-      }
-  
-      const onResetForm = () => {
-          setFormState( initialForm );
-      }
-  
-      const createValidator = ( ) => {
-          const formCheckedValues = {};
-  
-          for( const formField of Object.keys( formValidations )){
-              const [ fn, errorMessage ] = formValidations[ formField ];
-  
-              formCheckedValues[`${formField}Valid`] = fn( formState[ formField ] ) ? null : errorMessage;
-          }
-  
-          setFormValidation( formCheckedValues );
-  
-      }
-  
-      return {
-          ...formState,
-          formState,
-          onInputChange,
-          onResetForm,
-          ...formValidation,
-          isFormValid
-      }
+    const [state, dispatch] = useReducer(formReducer, INITIAL_STATE);
 
+
+    const handleInputChange = ({ target }) => {
+        const { name, value, files } = target;
+
+        dispatch({
+            type: 'CHANGE_INPUT',
+            payload: {
+                name,
+                value,
+                files
+            }
+        });
+
+        const validateForm = () => {
+            
+        }
+
+    }
+
+    return {
+        ...state,
+        handleInputChange
+    }
 
 }

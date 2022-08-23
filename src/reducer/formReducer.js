@@ -4,15 +4,20 @@ export const INITIAL_STATE = {
     content: "",
 }
 
-export const formReducer = (state , action) => {
+export const formReducer = (state, action) => {
     switch (action.type) {
         case "CHANGE_INPUT":
             return {
                 ...state,
-                [action.payload.name]: action.payload.files ?  action.payload.files[0] : action.payload.value,
+                [action.payload.name]: action.payload.files ? action.payload.files : action.payload.value,
+            }
+        case "SET_IMAGE":
+            return {
+                ...state,
+                image: action.payload
             }
         case "RESET_FORM":
-            return initialState
+            return INITIAL_STATE
         default:
             return state
     }
