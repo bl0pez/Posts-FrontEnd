@@ -8,6 +8,7 @@ export const initialsState = {
     indexOfFirstPost: 0,
     postsPerPage: 2,
     totalItems: 0,
+    post: {},
 };
 
 
@@ -42,6 +43,13 @@ export const postsReducer = (state, action) => {
                 loading: false,
                 totalItems: state.totalItems + 1,
             };
+        case "POST_GET":{
+            return {
+                ...state,
+                post: state.posts.filter(post => post._id === action.payload),
+                loading: false,
+            }
+        }
         case "NEXT_PAGE":
             return {
                 ...state,

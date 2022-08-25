@@ -5,9 +5,9 @@ import { Paginator } from "../paginator/Paginator";
 import { Post } from "./Post";
 
 export const PostsList = () => {
-  const { posts: data } = useContext(PostsContext);
+  const { posts: data, getPost } = useContext(PostsContext);
 
-  const { posts, loading, error, totalPage, totalItems} = data;
+  const { posts, loading, error, totalPage, totalItems } = data;
 
   if (loading) {
     return (
@@ -24,7 +24,7 @@ export const PostsList = () => {
   return (
     <>
         {posts.slice(data.indexOfFirstPost, data.indexOfLastPost).map((post) => (
-          <Post key={post._id} {...post} />
+          <Post key={post._id} {...post} getPost={getPost} />
         )) }
 
         {
