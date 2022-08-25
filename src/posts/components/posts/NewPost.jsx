@@ -1,47 +1,30 @@
 import { useContext, useReducer, useState } from "react";
-import { Modal } from "../../../components";
+import { Input, Modal } from "../../../components";
 import PostsContext from "../../../contexts/PostsContext";
-import { renderImg } from "../../../helpers/renderImg";
-import { formReducer, INITIAL_STATE } from "../../../reducer/formReducer";
+import { useForm } from "../../../hooks/useForm";
 
 export const NewPost = () => {
 
 
   
   const { createPost } = useContext(PostsContext);
-  const [image, setImage] = useState('');
+  const { title, content, image, formSubmitted, handleInputChange, resetForm} = useForm({
+    title: "",
+    content: "",
+    image: null,
+  });
 
-  const [formSubmitted, setFormSubmitted] = useState(false);
+  
   const [isOpen, setIsOpen] = useState(false);
-
-  const handleInputChange = (e) => {
-    const { name, value, files } = e.target;
-    dispatch({
-      type:"CHANGE_INPUT",
-      payload: {
-        name,
-        value,
-      }
-    })
-
-    const img = renderImg(files);
-
-    console.log(img);
-
-    if(state.title.length > 5 && state.image !== null && state.content.length > 5){
-      console.log("entro");
-      setFormSubmitted(true);
-    }
-  }
-
+  
   const handleSumit = (e) => {
     e.preventDefault();
+    if(!formSubmitted) return; 
 
-    if (!formSubmitted) return;
+    createPost({ title, content, image });
+    resetForm();
+    setIsOpen(false);    
 
-    createPost(state);
-    dispatch({type: "RESET_FORM"});
-    setIsOpen(false);
   };
 
   const handleModal = () => {
@@ -60,48 +43,36 @@ export const NewPost = () => {
       </button>
       <Modal title="New Post" isOpen={isOpen} setIsOpen={setIsOpen}>
         <form onSubmit={handleSumit}>
-          <div className="text-left flex flex-col gap-2 mb-4">
-            <label htmlFor="title" className="text-lg uppercase">
-              Title:
-            </label>
-            <input
-              className="input"
-              type="text"
-              name="title"
-              value={state.title}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className="text-left flex flex-col gap-2 mb-4">
-            <label htmlFor="image" className="text-lg uppercase">
-              Image:
-            </label>
-            <input
-              className="input"
-              type="file"
-              name="image"
-              onChange={handleInputChange}
-            />
-          </div>
+          <Input 
+            name="title"
+            type="text"
+            value={title}
+            onInputChange={handleInputChange}
+          
+          />
+          <Input 
+            name="image"
+            type="file"
+            onInputChange={handleInputChange}
+          />
           {
             image && (
-              <div className="text-left flex flex-col gap-2 mb-4 h-28 w-28">
-                <img className="w-full object-cover" src={renderImg(files)} alt="" />
+              <div className="h-20 w-20 mb-4">
+                <img
+                className="h-full w-full object-cover" 
+                  src={URL.createObjectURL(image)} 
+                  alt="preview" />
               </div>
-              )
+            )
           }
-          <div className="text-left flex flex-col gap-2 mb-4">
-            <label htmlFor="content" className="text-lg uppercase">
-              Content:
-            </label>
-            <textarea
-              className="input"
-              id="content"
-              name="content"
-              value={state.content}
-              onChange={handleInputChange}
-            ></textarea>
-          </div>
+
+
+          <Input 
+            type={"textArea"}
+            name="content"
+            value={content}
+            onInputChange={handleInputChange}
+          />
           <footer className="p-4 text-right space-x-2">
             <button
               type="button"

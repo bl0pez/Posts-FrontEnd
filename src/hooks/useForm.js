@@ -1,32 +1,34 @@
-import { useReducer } from "react";
-import { formReducer, INITIAL_STATE } from "../reducer/formReducer";
+import { useState } from "react";
 
-export const useForm = (initialForm = {}, formValidations = {}) => {
+export const useForm = (initialForm = {}) => {
 
-    const [state, dispatch] = useReducer(formReducer, INITIAL_STATE);
+    const [ formState, setFormState ] = useState( initialForm );
+    const [formSubmitted, setFormSubmitted] = useState(false);
 
 
     const handleInputChange = ({ target }) => {
-        const { name, value, files } = target;
-
-        dispatch({
-            type: 'CHANGE_INPUT',
-            payload: {
-                name,
-                value,
-                files
-            }
+        setFormState({
+            ...formState,
+            [target.name]: target.files ? target.files[0] : target.value
         });
 
-        const validateForm = () => {
-            
+        if(target.value.length > 5 && !!target.files){
+            setFormSubmitted(true);
         }
+
 
     }
 
+    const resetForm = () => {
+        setFormState( initialForm );
+    }
+
     return {
-        ...state,
-        handleInputChange
+        ...formState,
+        formState,
+        formSubmitted,
+        handleInputChange,
+        resetForm
     }
 
 }
