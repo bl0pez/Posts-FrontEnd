@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 
 export const Header = () => {
   return (
@@ -7,11 +7,14 @@ export const Header = () => {
         className="container mx-auto text-2xl text-white flex justify-between alingn-center"
       >
 
-        <Link to="/">MessageNode</Link>
+        <Link to="/feed/posts">MessageNode</Link>
 
         <nav className="space-x-5">
-          <Link to="/" className="p-3">Home</Link>
-          <Link to="/posts" className="p-3">Posts</Link>
+          <NavLink 
+            to="/feed/posts" 
+            className={({ isActive }) => isActive ? "text-amber-500 p-3" : "p-3"}
+
+            >Posts</NavLink>
         </nav>
       </div>
     </header>

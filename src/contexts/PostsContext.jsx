@@ -14,11 +14,6 @@ export const PostsProvider = ({ children }) => {
         dispatch({type: 'POSTS_ADD', payload: post});
     }
 
-    const getPost = (id) => {
-        dispatch({type: "POST_LOADING"});
-        dispatch({type: "POST_GET", payload: id});
-    }
-
     const nextPosts = async() => {
         dispatch({type: "POST_LOADING"});
         if(state.posts.length > state.indexOfLastPost) {
@@ -44,7 +39,6 @@ export const PostsProvider = ({ children }) => {
                 posts: state,
                 dispatch,
                 createPost,
-                getPost,
                 nextPosts,
                 prevPosts,
             }}>
