@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-export const Post = ({ title, author, createdAt, _id }) => {
+export const Post = ({ title, author, createdAt, _id, deletePost }) => {
   return (
     <article className="border border-violet-900 rounded p-2 max-w-2xl mx-auto my-5">
       <header className="post__header">
@@ -18,7 +18,10 @@ export const Post = ({ title, author, createdAt, _id }) => {
         <button className="px-4 py-1 rounded mx-2 text-violet-900 transition-color hover:bg-violet-300">
           Edit
         </button>
-        <button className="px-4 py-1 rounded text-red-600 transition-color hover:bg-red-300">
+        <button 
+          className="px-4 py-1 rounded text-red-600 transition-color hover:bg-red-300"
+          onClick={() => deletePost(_id)}
+          >
           Delete
         </button>
       </div>

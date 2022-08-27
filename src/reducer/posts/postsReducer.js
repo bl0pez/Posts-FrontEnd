@@ -32,7 +32,7 @@ export const postsReducer = (state, action) => {
             };
         case "POSTS_ERROR":
             return {
-                posts: [],
+                ...state,
                 loading: false,
                 error: action.payload
             };
@@ -42,6 +42,13 @@ export const postsReducer = (state, action) => {
                 posts: [...state.posts, action.payload],
                 loading: false,
                 totalItems: state.totalItems + 1,
+            };
+        case "POSTS_DELETE":
+            return {
+                ...state,
+                posts: state.posts.filter(post => post._id !== action.payload),
+                totalItems: state.totalItems - 1,
+                loading: false,
             };
         case "POST_GET":{
             return {

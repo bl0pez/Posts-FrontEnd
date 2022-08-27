@@ -14,13 +14,24 @@ export const PostsProvider = ({ children }) => {
         dispatch({type: 'POSTS_ADD', payload: post});
     }
 
+    const deletePost = (id) => {
+        dispatch({type: "POST_LOADING"});
+
+        const confirm = window.confirm("Are you sure you want to delete this post?");
+        
+        if(confirm){
+            dispatch({type: "POSTS_DELETE", payload: id});
+        }else{
+            dispatch({type: "POSTS_ERROR", payload: "Post not deleted"});
+        }
+    }
+
     const nextPosts = async() => {
         dispatch({type: "POST_LOADING"});
         if(state.posts.length > state.indexOfLastPost) {
             dispatch({type: 'NEXT_PAGE'});
             return;
         }
-
 
         const { posts } = await getPosts(state.page + 1);
         dispatch({type: 'NEXT_PAGE', payload: posts});
@@ -39,6 +50,7 @@ export const PostsProvider = ({ children }) => {
                 posts: state,
                 dispatch,
                 createPost,
+                deletePost,
                 nextPosts,
                 prevPosts,
             }}>
