@@ -1,23 +1,26 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 export const useForm = (initialForm = {}) => {
 
     const [ formState, setFormState ] = useState( initialForm );
-    const [formSubmitted, setFormSubmitted] = useState(false);
-
 
     const handleInputChange = ({ target }) => {
         setFormState({
             ...formState,
             [target.name]: target.files ? target.files[0] : target.value
         });
-
-        if(target.value.length > 5 && !!target.files){
-            setFormSubmitted(true);
-        }
-
-
     }
+    
+
+    const isFormValid = useMemo( () => {
+        for (const key in formState) {
+            if ( !formState[key] ) {
+                return false;
+            }
+        }
+        return true;
+
+    }, [ formState ] );
 
     const resetForm = () => {
         setFormState( initialForm );
@@ -26,7 +29,7 @@ export const useForm = (initialForm = {}) => {
     return {
         ...formState,
         formState,
-        formSubmitted,
+        isFormValid,
         handleInputChange,
         resetForm
     }

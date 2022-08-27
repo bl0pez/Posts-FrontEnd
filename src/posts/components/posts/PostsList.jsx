@@ -7,7 +7,7 @@ import { Post } from "./Post";
 export const PostsList = () => {
   const { posts: data, getPost } = useContext(PostsContext);
 
-  const { posts, loading, error, totalPage, totalItems } = data;
+  const { posts, loading, error, totalItems, postsPerPage } = data;
 
   if (loading) {
     return (
@@ -28,7 +28,7 @@ export const PostsList = () => {
         )) }
 
         {
-          totalItems > totalPage && <Paginator />
+          totalItems > postsPerPage && <Paginator />
         }
 
     </>

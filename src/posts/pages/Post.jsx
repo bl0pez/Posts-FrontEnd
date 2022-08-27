@@ -1,11 +1,12 @@
 import { Loader } from "../../components/loader/Loader";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useGetPost } from "../../hooks/useGetPost";
 import notFound from "../img/not-found.svg";
 
 export const Post = () => {
   const { id } = useParams();
   const { error, loading, post } = useGetPost(id);
+  const navigate = useNavigate();
 
   if (loading) {
     return (
@@ -39,6 +40,14 @@ export const Post = () => {
             <p className="text-gray-600 p-2">
               Content: <span>{post.content}</span>
             </p>
+            <button 
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold p-2 rounded"
+              onClick={() => navigate(-1)}
+              >
+              Volver
+            </button>
+          </div>
+          <div>
           </div>
         </div>
       </div>

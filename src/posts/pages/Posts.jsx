@@ -2,7 +2,6 @@ import { Modal } from "../../components";
 import { NewPost, PostsList } from "../components";
 
 export const Posts = () => {
-
   return (
     <div className="container mx-auto">
       <section className="py-4 text-center">

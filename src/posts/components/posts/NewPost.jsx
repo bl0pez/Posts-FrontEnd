@@ -4,22 +4,18 @@ import PostsContext from "../../../contexts/PostsContext";
 import { useForm } from "../../../hooks/useForm";
 
 export const NewPost = () => {
-
-
-  
   const { createPost } = useContext(PostsContext);
-  const { title, content, image, formSubmitted, handleInputChange, resetForm} = useForm({
+  const { title, content, image, handleInputChange, resetForm, isFormValid} = useForm({
     title: "",
     content: "",
     image: null,
   });
 
-  
   const [isOpen, setIsOpen] = useState(false);
   
   const handleSumit = (e) => {
     e.preventDefault();
-    if(!formSubmitted) return; 
+    if(!isFormValid) return; 
 
     createPost({ title, content, image });
     resetForm();
@@ -83,8 +79,8 @@ export const NewPost = () => {
             </button>
             <button
               type="submit"
-              className={`${formSubmitted ? "px-4 py-1 rounded text-white bg-violet-900 transition-color hover:bg-violet-900-300" : " bg-slate-300 px-4 py-1 rounded text-white cursor-not-allowed"}`}
-              disabled={!formSubmitted}
+              className={`${isFormValid ? "px-4 py-1 rounded text-white bg-violet-900 transition-color hover:bg-violet-900-300" : " bg-slate-300 px-4 py-1 rounded text-white cursor-not-allowed"}`}
+              disabled={!isFormValid}
             >
               Crear
             </button>
