@@ -5,11 +5,14 @@ import { Paginator } from "../paginator/Paginator";
 import { Post } from "./Post";
 
 export const PostsList = () => {
-  const { posts: data, getPost, deletePost } = useContext(PostsContext);
+  const { posts, pagination, loading} = useContext(PostsContext);
 
-  const { posts, loading, error, totalItems, postsPerPage } = data;
+  const { indexOfFirstPost, indexOfLastPost, postsPerPage, totalItems } = pagination;
 
-  if (loading) {
+
+  const { data, error } = posts;
+
+  if (!loading) {
     return (
       <div className="text-center">
         <Loader />
@@ -23,8 +26,8 @@ export const PostsList = () => {
 
   return (
     <>
-        {posts.slice(data.indexOfFirstPost, data.indexOfLastPost).map((post) => (
-          <Post key={post._id} {...post} getPost={getPost} deletePost={deletePost} />
+        {posts.slice(indexOfFirstPost, indexOfLastPost).map((post) => (
+          <Post key={post._id} {...post} />
         )) }
 
         {

@@ -5,6 +5,7 @@ export const useForm = (initialForm = {}) => {
     const [ formState, setFormState ] = useState( initialForm );
 
     const handleInputChange = ({ target }) => {
+
         setFormState({
             ...formState,
             [target.name]: target.files ? target.files[0] : target.value

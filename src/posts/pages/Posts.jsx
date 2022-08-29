@@ -1,4 +1,3 @@
-import { Modal } from "../../components";
 import { NewPost, PostsList } from "../components";
 
 export const Posts = () => {
@@ -19,7 +18,6 @@ export const Posts = () => {
         <NewPost />
       </section>
       <PostsList />
-      <Modal />
     </div>
   );
 };

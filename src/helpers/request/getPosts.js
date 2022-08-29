@@ -1,5 +1,13 @@
 export const getPosts = async(page) => {
-    const resp = await fetch(`${import.meta.env.VITE_BACKEND_URL}/feed/posts?page=${page}`);
+
+    const request = new Request(`${import.meta.env.VITE_BACKEND_URL}/feed/posts?page=${page}`);
+    const resp = await fetch(request);
+
+    if (!resp.ok) {
+        const data = await resp.json();
+        throw new Error(data.message);
+    }
+
     const data = await resp.json();
     return data;
 }

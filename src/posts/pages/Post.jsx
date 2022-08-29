@@ -1,5 +1,5 @@
 import { Loader } from "../../components/loader/Loader";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useGetPost } from "../../hooks/useGetPost";
 import notFound from "../img/not-found.svg";
 

@@ -1,6 +1,6 @@
 import React from "react";
 
-export const Modal = ({ children, title, isOpen, setIsOpen }) => {
+export const Modal = ({ children, title, isOpen }) => {
   return (
     <>
       {isOpen && (

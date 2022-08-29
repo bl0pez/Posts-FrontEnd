@@ -1,8 +1,11 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { PostsLayout } from '../posts/layout/PostsLayout';
 import { Post, Posts } from '../posts';
 
 export const AppRouter = () => {
+
+  
+
   return (
     <Routes>
 

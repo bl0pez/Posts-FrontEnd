@@ -1,80 +1,94 @@
 export const initialsState = {
-    posts: [],
-    loading: false,
-    error: null,
-    totalPage: 0,
-    page: 1,
-    indexOfLastPost: 0,
-    indexOfFirstPost: 0,
-    postsPerPage: 2,
-    totalItems: 0,
-    post: {},
+    posts: {
+        data: [],
+        loading: false,
+        error: null
+    },
+    post: {
+        data: null,
+        loading: false,
+        error: null
+    },
+    pagination: {
+        totalPage: 0,
+        indexOfLastPost: 0,
+        indexOfFirstPost: 0,
+        totalItems: 0,
+        postsPerPage: 2,
+        page: 1,
+    }
 };
 
 
 export const postsReducer = (state, action) => {
-
     switch(action.type){
-        case "POST_LOADING":
+        case "POSTS_LOADING":
             return {
                 ...state,
-                loading: true,
+                posts: {
+                    ...state,
+                    loading: true,
+                }
             };
         case "POSTS_SUCCESS":
             return {
                 ...state,
-                posts: action.payload.posts,
-                loading: false,
-                error: null,
-                totalPage: action.payload.totalItems / 2,
-                indexOfLastPost: state.postsPerPage,
-                totalItems: action.payload.totalItems,
+                posts: {
+                    data: action.payload.posts,
+                    loading: false,
+                    error: null,
+                },
+                pagination: {
+                    ...state.pagination,
+                    totalItems: action.payload.totalItems,
+                    totalPage: action.payload.totalItems / 2,
+                    indexOfLastPost: state.pagination.postsPerPage,
+                }
             };
         case "POSTS_ERROR":
             return {
                 ...state,
-                loading: false,
-                error: action.payload
+                posts: {
+                    data: [],
+                    loading: false,
+                    error: action.payload,
+                },
             };
-        case "POSTS_ADD":
+        case "POST_LOADING":
             return {
                 ...state,
-                posts: [...state.posts, action.payload],
-                loading: false,
-                totalItems: state.totalItems + 1,
+                post: {
+                    ...state.post,
+                    loading: true,
+                }
             };
-        case "POSTS_DELETE":
+        case "POST_ADD":
             return {
                 ...state,
-                posts: state.posts.filter(post => post._id !== action.payload),
-                totalItems: state.totalItems - 1,
-                loading: false,
+                post:{
+                    data: action.payload,
+                    loading: false,
+                    error: null,
+                },
+                posts: {
+                    ...state.posts,
+                    data: [...state.posts.data, state.post.data],
+                    loading: false,
+                },
+                pagination: {
+                    ...state.pagination,
+                    totalItems: state.pagination.totalItems + 1,
+                }
             };
-        case "POST_GET":{
+        case "POST_ERROR":
             return {
                 ...state,
-                post: state.posts.filter(post => post._id === action.payload),
-                loading: false,
-            }
-        }
-        case "NEXT_PAGE":
-            return {
-                ...state,
-                posts: state.posts.length > state.indexOfLastPost ? state.posts : [...state.posts, ...action.payload],
-                page: state.page + 1,
-                loading: false,
-                indexOfLastPost: state.indexOfLastPost + state.postsPerPage,
-                indexOfFirstPost: state.indexOfFirstPost + state.postsPerPage,
+                post: {
+                    data: null,
+                    loading: false,
+                    error: action.payload,
+                }
             };
-        case "PREVIOUS_PAGE":
-            return {
-                ...state,
-                loading: false,
-                page: state.page - 1,
-                indexOfLastPost: state.indexOfLastPost - state.postsPerPage,
-                indexOfFirstPost: state.indexOfFirstPost - state.postsPerPage,
-            };
-
         default: 
             return state;
     }

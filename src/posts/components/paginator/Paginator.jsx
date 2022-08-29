@@ -3,7 +3,7 @@ import PostsContext from "../../../contexts/PostsContext";
 
 export const Paginator = () => {
   const {
-    posts: data,
+    pagination,
     nextPosts,
     prevPosts,
   } = useContext(PostsContext);
@@ -13,7 +13,7 @@ export const Paginator = () => {
     indexOfLastPost,
     indexOfFirstPost,
     totalItems,
-  } = data;
+  } = pagination;
 
   if (postsPerPage > indexOfFirstPost) {
     return (
