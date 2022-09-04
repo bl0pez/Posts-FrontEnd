@@ -7,17 +7,12 @@ export const EditPost = ({ isOpen, setIsOpen, post }) => {
   const { postEdit, createPost } = useContext(PostsContext);
 
   const { loading, error } = createPost;
-  const file = new File([import.meta.env.VITE_BACKEND_URL_STATIC], post.imageUrl, { type: "image/jpeg" });
 
-  const { title, image, content, handleInputChange, isFormValid } = useForm({
+  const { title, image, content, handleInputChange, isFormValid, resetForm } = useForm({
     title: post.title,
     image: post.imageUrl,
     content: post.content,
   });
-
-  
-
-  console.log(!isFormValid && loading);
 
   const handleSubmmit = (e) => {
     e.preventDefault();

@@ -1,14 +1,21 @@
+import { useContext, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { Loader } from "../../components/loader/Loader";
-import { useNavigate } from "react-router-dom";
-import { useGetPost } from "../../hooks/useGetPost";
+import PostsContext from "../../contexts/PostsContext";
 import notFound from "../img/not-found.svg";
 
 export const Post = () => {
+
   const { id } = useParams();
-  const { error, loading, post } = useGetPost(id);
+  const { post: data, postDetail } = useContext(PostsContext);
+  const { post, loading, error } = data;
   const navigate = useNavigate();
 
-  if (loading) {
+  useState(() => {
+    postDetail(id);
+  }, [id, postDetail]);
+
+  if (!loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <Loader />

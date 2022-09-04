@@ -16,6 +16,7 @@ export const usePosts = () => {
     });
 
     const [post, setPost] = useState({
+        post: null,
         loading: false,
         error: null,
     });
@@ -109,6 +110,66 @@ export const usePosts = () => {
 
     }
 
+    const postDelete = (id) => {
+        setCreatePost({
+            loading: false,
+            error: null,
+        });
+
+        request('/feed/post/' + id, {
+            method: 'DELETE',
+        })
+            .then(data => {
+                const updatedPosts = posts.filter(p => p._id !== id);
+                setPosts(updatedPosts);
+                setPagination({
+                    ...pagination,
+                    totalItems: pagination.totalItems - 1,
+                    indexOfFirstPost: pagination.indexOfFirstPost - 1,
+                    indexOfLastPost: pagination.indexOfLastPost - 1,
+                });
+                setCreatePost({
+                    loading: true,
+                    error: null,
+                });
+            })
+            .catch(err => {
+                setCreatePost({
+                    loading: true,
+                    error: err.message,
+                });
+            });
+    }
+
+    const postDetail = (id) => {
+        setPost({
+            post: null,
+            loading: false,
+            error: null,
+        });
+
+        const post = posts.find(p => p._id === id);
+
+        if (post) {
+            setPost({
+                post: post,
+                loading: true,
+                error: null,
+            });
+
+            return;
+        }
+
+        request('/feed/post/' + id)
+            .then(data => {
+                setPost({
+                    post: data.post,
+                    loading: true,
+                    error: null,
+                });
+            })
+    }
+
     const nextPosts = () => {
 
         if (posts.length > pagination.indexOfLastPost) {
@@ -149,8 +210,8 @@ export const usePosts = () => {
 
     return {
         posts, loading, error, post,
-        pagination, createPost, postEdit,
-        nextPosts, prevPosts, addpost
+        pagination, createPost, postEdit, postDelete,
+        postDetail, nextPosts, prevPosts, addpost
     };
 
 

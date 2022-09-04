@@ -1,13 +1,27 @@
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { Modal } from "../../../components";
+import PostsContext from "../../../contexts/PostsContext";
 import { EditPost } from "./EditPost";
 
 export const Post = (post) => {
 
   const { title, author, createdAt, _id } = post;
+  const { postDelete } = useContext(PostsContext);
 
   const [openModal, setOpenModal] = useState(false);
+
+  const deletePost = () => {
+    const question = window.confirm("Are you sure you want to delete this post?");
+    if (question) {
+      postDelete(_id);
+      return;
+    }
+    
+
+    return;
+
+  }
 
 
   return (
@@ -32,7 +46,7 @@ export const Post = (post) => {
         </button>
         <button 
           className="px-4 py-1 rounded text-red-600 transition-color hover:bg-red-300"
-          onClick={() => {}}
+          onClick={deletePost}
           >
           Delete
         </button>
