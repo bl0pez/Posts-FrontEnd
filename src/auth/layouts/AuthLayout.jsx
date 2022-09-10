@@ -5,15 +5,15 @@ export const AuthLayout = () => {
   return (
     
     <>
-    
+
     <Header />
 
-    <div className="flex justify-center">
+    <div className="lg:h-[46rem] h-[45rem] flex justify-center items-center">
     <Outlet />
     </div>
-    
-    
+
     </>
+
 
   )
 }

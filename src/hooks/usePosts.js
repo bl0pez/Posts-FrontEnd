@@ -28,7 +28,12 @@ export const usePosts = () => {
 
 
     useEffect(() => {
-        request('/feed/posts?page=' + pagination.page)
+        request('/feed/posts?page=' + pagination.page, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }})
             .then(data => {
                 setPosts(data.posts);
                 setPagination({

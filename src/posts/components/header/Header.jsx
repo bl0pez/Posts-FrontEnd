@@ -1,6 +1,11 @@
+import { useContext } from "react";
 import { NavLink, Link } from "react-router-dom";
+import AuthContext from "../../../contexts/AuthContext";
 
 export const Header = () => {
+
+  const { startoagout } = useContext(AuthContext);
+
   return (
     <header className="py-3 bg-violet-900">
       <div 
@@ -15,6 +20,10 @@ export const Header = () => {
             className={({ isActive }) => isActive ? "text-amber-500 p-3" : "p-3"}
 
             >Posts</NavLink>
+            <button
+              onClick={startoagout}
+              className="p-3"
+            >Logout</button>
         </nav>
       </div>
     </header>

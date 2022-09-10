@@ -1,16 +1,13 @@
-import React, { useContext, useReducer } from "react";
+import React, { useContext } from "react";
 import { Loader } from "../../../components";
 import PostsContext from "../../../contexts/PostsContext";
 import { Paginator } from "../paginator/Paginator";
 import { Post } from "./Post";
 
 export const PostsList = () => {
-  const { posts, pagination, loading} = useContext(PostsContext);
+  const { posts, error, pagination, loading } = useContext(PostsContext);
 
   const { indexOfFirstPost, indexOfLastPost, postsPerPage, totalItems } = pagination;
-
-
-  const { data, error } = posts;
 
   if (!loading) {
     return (
@@ -26,13 +23,23 @@ export const PostsList = () => {
 
   return (
     <>
-        {posts.slice(indexOfFirstPost, indexOfLastPost).map((post) => (
-          <Post key={post._id} {...post} />
-        )) }
+      {
+        posts.length > 0
+          ? (
+              posts.slice(indexOfFirstPost, indexOfLastPost).map((post) => (
+                <Post key={post._id} {...post} />
+              ))
 
-        {
-          totalItems > postsPerPage && <Paginator />
-        }
+                (totalItems > postsPerPage && <Paginator />)
+            )
+
+          : (
+              <div className="text-center">
+                <h1>No posts yet</h1>
+              </div>
+            )
+
+      }
 
     </>
   );

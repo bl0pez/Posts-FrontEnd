@@ -37,8 +37,12 @@ export const CreatePost = ({isOpen, setIsOpen}) => {
         setIsOpen(!isOpen);
       };
 
+      console.log("renader!!");
+
   return (
-    <form onSubmit={handleSumit}>
+    <form 
+      onSubmit={handleSumit}
+      >
       {
         error && <p className="text-red-500">{error}</p>
       }

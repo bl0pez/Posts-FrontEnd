@@ -1,13 +1,13 @@
-import { PostsProvider } from "./contexts/PostsContext";
 import { BrowserRouter } from "react-router-dom";
+import { AuthProvider } from "./contexts/AuthContext";
 import { AppRouter } from "./router/AppRouter";
 
 export const App = () => {
   return (
     <BrowserRouter>
-      <PostsProvider>
+      <AuthProvider>
         <AppRouter />
-      </PostsProvider>
+      </AuthProvider>
     </BrowserRouter>
   );
 };
