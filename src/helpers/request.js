@@ -1,14 +1,11 @@
 export const request = async(url, options) => {
-    const req = new Request(import.meta.env.VITE_BACKEND_URL + url, options);
-
-    const resp = await fetch(req);
+    const res = await fetch(import.meta.env.VITE_BACKEND_URL + url, options);
+    const data = await res.json();
     
-    if (!resp.ok) {
-        const data = await resp.json();
-        throw new Error(data.message);
+    if (!res.ok) {
+        throw new Error(data.message || 'Something went wrong!');
     }
 
-    const data = await resp.json();
     return data;
 
 }

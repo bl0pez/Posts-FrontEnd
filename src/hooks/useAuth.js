@@ -10,8 +10,6 @@ export const useAuth = () => {
     //check if user is authenticated
     const checkAuthToken = () => {
         const token = localStorage.getItem("token");
-        console.log("token", token);
-
         if (!token) return setStatus("not-authenticated");
 
         request("/auth/renew", {

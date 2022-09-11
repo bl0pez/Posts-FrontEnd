@@ -1,223 +1,61 @@
-import { useEffect, useState } from 'react';
-import { request } from '../helpers';
+import { useContext, useEffect, useState } from "react"
+import AuthContext from "../contexts/AuthContext";
+import { request } from "../helpers/request";
+
+
+const initialState = {
+    posts: [],
+    totalItems: 0,
+    loading: true,
+    error: null,
+    page: 1,
+}
 
 export const usePosts = () => {
 
-    const [posts, setPosts] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
-    const [pagination, setPagination] = useState({
-        totalPage: 0,
-        indexOfLastPost: 0,
-        indexOfFirstPost: 0,
-        totalItems: 0,
-        postsPerPage: 2,
-        page: 1,
-    });
+    const [statePosts, setStatePosts] = useState(initialState);
 
-    const [post, setPost] = useState({
-        post: null,
-        loading: false,
-        error: null,
-    });
+    const getPosts = async () => {
 
-    const [createPost, setCreatePost] = useState({
-        loading: false,
-        error: null,
-    });
+        setStatePosts({ ...statePosts, loading: true });
 
+        try {
+            const data = await request(`/feed/posts?page=${statePosts.page}`);
+            setStatePosts({
+                ...statePosts,
+                posts: [...statePosts.posts, ...data.posts],
+                totalItems: data.totalItems,
+                loading: false,
+            });
+        } catch (error) {
+            setStatePosts({
+                ...statePosts,
+                loading: false,
+                error: error.message
+            });
+        }
+    }
 
     useEffect(() => {
-        request('/feed/posts?page=' + pagination.page, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
-        }})
-            .then(data => {
-                setPosts(data.posts);
-                setPagination({
-                    ...pagination,
-                    totalItems: data.totalItems,
-                    totalPage: data.totalItems / pagination.postsPerPage,
-                    indexOfLastPost: pagination.postsPerPage,
-                })
-                setLoading(true);
-            })
-            .catch(err => {
-                setError(err.message);
-                setLoading(true);
-            })
-    }, []);
+        getPosts();
+    }, [statePosts.page]);
 
+    const nextPage = () => {
 
-    const addpost = (post) => {
-
-        setCreatePost({
-            loading: false,
-            error: null,
-        });
-
-        request('/feed/post', {
-            method: 'POST',
-            body: post,
-        })
-            .then(data => {
-                setPosts([data.post, ...posts]);
-                setPagination({
-                    ...pagination,
-                    totalItems: pagination.totalItems + 1,
-                });
-                setCreatePost({
-                    loading: true,
-                    error: null,
-                });
-            })
-            .catch(err => {
-                setCreatePost({
-                    loading: true,
-                    error: err.message,
-                });
-            });
-    }
-
-    const postEdit = (post, id) => {
-        
-        setCreatePost({
-            loading: false,
-            error: null,
-        });
-
-        request('/feed/post/' + id, {
-            method: 'PUT',
-            body: post,
-        })
-            .then(data => {
-                const updatedPosts = posts.map(p => {
-                    if (p._id === data.post._id) {
-                        return data.post;
-                    }
-                    return p;
-                });
-
-                setPosts(updatedPosts);
-                setCreatePost({
-                    loading: true,
-                    error: null,
-                });
-            })
-            .catch(err => {
-                setCreatePost({
-                    loading: true,
-                    error: err.message,
-                });
-            });
-
-    }
-
-    const postDelete = (id) => {
-        setCreatePost({
-            loading: false,
-            error: null,
-        });
-
-        request('/feed/post/' + id, {
-            method: 'DELETE',
-        })
-            .then(data => {
-                const updatedPosts = posts.filter(p => p._id !== id);
-                setPosts(updatedPosts);
-                setPagination({
-                    ...pagination,
-                    totalItems: pagination.totalItems - 1,
-                    indexOfFirstPost: pagination.indexOfFirstPost - 1,
-                    indexOfLastPost: pagination.indexOfLastPost - 1,
-                });
-                setCreatePost({
-                    loading: true,
-                    error: null,
-                });
-            })
-            .catch(err => {
-                setCreatePost({
-                    loading: true,
-                    error: err.message,
-                });
-            });
-    }
-
-    const postDetail = (id) => {
-        setPost({
-            post: null,
-            loading: false,
-            error: null,
-        });
-
-        const post = posts.find(p => p._id === id);
-
-        if (post) {
-            setPost({
-                post: post,
-                loading: true,
-                error: null,
-            });
-
+        if(statePosts.posts.length >= statePosts.totalItems) {
             return;
         }
 
-        request('/feed/post/' + id)
-            .then(data => {
-                setPost({
-                    post: data.post,
-                    loading: true,
-                    error: null,
-                });
-            })
-    }
-
-    const nextPosts = () => {
-
-        if (posts.length > pagination.indexOfLastPost) {
-            setPagination({
-                ...pagination,
-                indexOfLastPost: pagination.indexOfLastPost + pagination.postsPerPage,
-                indexOfFirstPost: pagination.indexOfFirstPost + pagination.postsPerPage,
-            });
-            return;
-        }
-
-        setLoading(false);
-        request('/feed/posts?page=' + (pagination.page + 1))
-            .then(data => {
-                setPosts([...posts, ...data.posts]);
-                setLoading(true);
-                setPagination({
-                    ...pagination,
-                    page: pagination.page + 1,
-                    indexOfLastPost: pagination.indexOfLastPost + pagination.postsPerPage,
-                    indexOfFirstPost: pagination.indexOfFirstPost + pagination.postsPerPage,
-                });
-            });
-    }
-
-    const prevPosts = () => {
-        if (pagination.indexOfFirstPost === 0) {
-            return;
-        }
-
-        setPagination({
-            ...pagination,
-            indexOfLastPost: pagination.indexOfLastPost - pagination.postsPerPage,
-            indexOfFirstPost: pagination.indexOfFirstPost - pagination.postsPerPage,
+        setStatePosts({
+            ...statePosts,
+            page: statePosts.page + 1,
         });
-
     }
+
 
     return {
-        posts, loading, error, post,
-        pagination, createPost, postEdit, postDelete,
-        postDetail, nextPosts, prevPosts, addpost
-    };
-
+        statePosts,
+        nextPage,
+    }
 
 }

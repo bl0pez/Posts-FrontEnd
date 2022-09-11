@@ -5,36 +5,35 @@ const PostsContext = createContext();
 
 export const PostsProvider = ({ children }) => {
 
-  const {
-    posts, 
-    totalItems, 
-    loading, 
-    post, 
-    createPost, 
-    postEdit, 
-    postDelete, 
-    postDetail, 
-    pagination, 
-    nextPosts, 
-    prevPosts, 
-    addpost }
-    = usePosts();
+  const { statePosts, nextPage } = usePosts();
+
+  const addNewPost = (post) => {
+
+  }
+
+  const deletePost = (id) => {
+
+  }
+
+  const updatePost = (updatePost) => {
+
+  }
+
+  const getPost = (id) => {
+
+  }
+
+
 
   return (
     <PostsContext.Provider
       value={{
-        posts,
-        totalItems,
-        loading,
-        pagination,
-        createPost,
-        postDelete,
-        postDetail,
-        postEdit,
-        nextPosts,
-        addpost,
-        prevPosts,
-        post,
+        statePosts,
+        nextPage,
+        addNewPost,
+        updatePost,
+        deletePost,
+        getPost,
       }}
     >
       {children}

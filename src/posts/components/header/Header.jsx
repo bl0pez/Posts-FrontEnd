@@ -9,7 +9,8 @@ export const Header = () => {
   return (
     <header className="py-3 bg-violet-900">
       <div 
-        className="container mx-auto text-2xl text-white flex justify-between alingn-center"
+        className="container mx-auto text-2xl text-white flex
+        flex-col alingn-center text-center lg:flex-row lg:justify-between"
       >
 
         <Link to="/feed/posts">MessageNode</Link>
@@ -22,7 +23,6 @@ export const Header = () => {
             >Posts</NavLink>
             <button
               onClick={startoagout}
-              className="p-3"
             >Logout</button>
         </nav>
       </div>

@@ -1,27 +1,15 @@
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { Modal } from "../../../components";
-import PostsContext from "../../../contexts/PostsContext";
+import AuthContext from "../../../contexts/AuthContext";
 import { EditPost } from "./EditPost";
 
-export const Post = (post) => {
-
-  const { title, author, createdAt, _id } = post;
-  const { postDelete } = useContext(PostsContext);
+export const Post = ({title, author, creator, createdAt, _id}) => {
 
   const [openModal, setOpenModal] = useState(false);
+  const { user } = useContext(AuthContext);
 
-  const deletePost = () => {
-    const question = window.confirm("Are you sure you want to delete this post?");
-    if (question) {
-      postDelete(_id);
-      return;
-    }
-    
-
-    return;
-
-  }
+  console.log(user.userId === creator);
 
 
   return (
@@ -38,21 +26,23 @@ export const Post = (post) => {
           className="px-4 py-1 rounded text-violet-900 transition-colors hover:bg-violet-300">
           View
         </Link>
-        <button 
-          className="px-4 py-1 rounded mx-2 text-violet-900 transition-color hover:bg-violet-300"
-          onClick={() => setOpenModal(true)}
-          >
-          Edit
-        </button>
-        <button 
-          className="px-4 py-1 rounded text-red-600 transition-color hover:bg-red-300"
-          onClick={deletePost}
-          >
-          Delete
-        </button>
+  {
+    user.userId === creator && (
+      <><button
+              className="px-4 py-1 rounded mx-2 text-violet-900 transition-color hover:bg-violet-300"
+              onClick={() => setOpenModal(true)}
+            >
+              Edit
+            </button><button
+              className="px-4 py-1 rounded text-red-600 transition-color hover:bg-red-300"
+            >
+                Delete
+              </button></>
+    )
+  }
       </div>
       <Modal isOpen={openModal} title="Edit post">
-        <EditPost setIsOpen={setOpenModal} isOpen={openModal} post={post} />
+        <EditPost setIsOpen={setOpenModal} isOpen={openModal}/>
       </Modal>
     </article>
   );

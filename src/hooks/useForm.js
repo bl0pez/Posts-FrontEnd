@@ -1,8 +1,9 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 
 export const useForm = (initialForm = {}) => {
 
     const [ formState, setFormState ] = useState( initialForm );
+    const loadImgRef = useRef(null);
 
     const handleInputChange = ({ target }) => {
 
@@ -10,6 +11,14 @@ export const useForm = (initialForm = {}) => {
             ...formState,
             [target.name]: target.files ? target.files[0] : target.value
         });
+
+        if( target.files ) {
+            const reader = new FileReader();
+            reader.onload = file => {
+                loadImgRef.current.src = file.target.result;
+            }
+            reader.readAsDataURL(target.files[0]);
+        }
     }
     
 
@@ -31,6 +40,7 @@ export const useForm = (initialForm = {}) => {
         ...formState,
         formState,
         isFormValid,
+        loadImgRef,
         handleInputChange,
         resetForm
     }
