@@ -9,9 +9,6 @@ export const Post = ({title, author, creator, createdAt, _id}) => {
   const [openModal, setOpenModal] = useState(false);
   const { user } = useContext(AuthContext);
 
-  console.log(user.userId === creator);
-
-
   return (
     <article className="border border-violet-900 rounded p-2 max-w-2xl mx-auto my-5">
       <header className="post__header">
